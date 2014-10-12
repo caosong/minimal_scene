@@ -17,17 +17,17 @@ img_pt_mat file: the file that contains the bi-partite graph between points and 
         ...
     , where pt_idx is the point index, img_idx is the image index, and pos is the index of which the point's descriptor appear in the feature (e.g. SIFT) list of that image.
 
-list keys file: each line of this file should be the location of a SIFT key file. The order should be consistent with image index (0 based). 
+{list keys file}: each line of this file should be the location of a SIFT key file. The order should be consistent with image index (0 based). 
 
-num images: total number of images
+{num images}: total number of images
 
-num points: total number of points
+{num points}: total number of points
 
-k cover: K used in the probabilistic K-cover algorithm
+{k cover}: K used in the probabilistic K-cover algorithm
 
-percentage: The target percentage of coverage over all images
+{percentage}: The target percentage of images to be covered
 
-point idx file: The output file of selected point indices
+{point idx file}: The output file of selected point indices
 
 [record dist]: Record distribution of each image being covered, for debugging purposes. Normally could be set to 0.
 
