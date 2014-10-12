@@ -1,6 +1,5 @@
 /* point_reduce.cpp */
 #include "reduce.h"
-#include "kccs.h"
 #include "keys.h"
 #include "point_reduce.h"
 

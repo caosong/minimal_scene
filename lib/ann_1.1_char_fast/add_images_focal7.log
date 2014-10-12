@@ -1,9 +1,0 @@
-/hydra/S2/snavely/code/bundler/src/bundler64 list2K.txt --options_file options.added.txt 
-Host: hydra108.cs.cornell.edu
-[OnInit] Running program /hydra/S2/snavely/code/bundler/src/bundler64
-### Local time and date: Tue Aug  7 03:30:40 2012
-Loading images from file 'list2K.txt'
-[BundlerApp::OnInit] Command line:
-/hydra/S2/snavely/code/bundler/src/bundler64 list2K.txt --options_file options.added.txt 
-[BundlerApp::OnInit] Processing options...
-Error reading options file options.added.txt
