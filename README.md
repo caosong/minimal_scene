@@ -11,7 +11,7 @@ Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points}
 
 {} means required arguments and [] means optional arguments. Here is a subset of arguments explained:
 
-img_pt_mat file: the file that contains the bi-partite graph between points and images. Each line should be in the format of 
+{img_pt_mat file}: the file that contains the bi-partite graph between points and images. Each line should be in the format of 
         pt_idx1 img_idx1 pos1
         pt_idx2 img_idx2 pos2
         ...
