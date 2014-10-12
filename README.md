@@ -35,7 +35,7 @@ Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points}
 
 [reduce memory]: whether try to reduce memory usage, 0 for not to, which is faster.
 
-[ip weight]: The "p" in the paper used as the constant probability of an visibility event. (0.6 used in the paper)
+[ip weight]: The 'p' in the paper used as the constant probability of an visibility event. (0.6 used in the paper)
 
 [threshold as prob]: Minimum probability for "covering" an image. (p_{min} in the paper)
 
