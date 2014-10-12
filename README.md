@@ -7,9 +7,9 @@ Platform tested: Ubuntu 12.04, Ubuntu 14.04
 Packages required: g++, libtbb-dev, zlib1g-dev
 
 
-Usage: point_reduce <img_pt_mat file> <list keys file> <num images> <num points> <k cover> <percentage> <point idx file> [record dist] [use k-cover] [reduce memory] [ip weight] [min prob] [threshold as prob] [none 0; read mean 1; write mean 2] [mean file] [use binary] [load pt idx] [cdf file] [cdf as prob]
+Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points} {k cover} {percentage} {point idx file} [record dist] [use k-cover] [reduce memory] [ip weight] [min prob] [threshold as prob] [none 0; read mean 1; write mean 2] [mean file] [use binary] [load pt idx] [cdf file] [cdf as prob]
 
-<> means required arguments and [] means optional arguments. Here is a subset of arguments explained:
+{} means required arguments and [] means optional arguments. Here is a subset of arguments explained:
 
 img_pt_mat file: the file that contains the bi-partite graph between points and images. Each line should be in the format of 
         pt_idx1 img_idx1 pos1
