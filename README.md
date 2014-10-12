@@ -11,23 +11,23 @@ Usage: point_reduce <img_pt_mat file> <list keys file> <num images> <num points>
 
 <> means required arguments and [] means optional arguments. Here is a subset of arguments explained:
 
-<img_pt_mat file>: the file that contains the bi-partite graph between points and images. Each line should be in the format of 
+img_pt_mat file: the file that contains the bi-partite graph between points and images. Each line should be in the format of 
         pt_idx1 img_idx1 pos1
         pt_idx2 img_idx2 pos2
         ...
     , where pt_idx is the point index, img_idx is the image index, and pos is the index of which the point's descriptor appear in the feature (e.g. SIFT) list of that image.
 
-<list keys file>: each line of this file should be the location of a SIFT key file. The order should be consistent with image index (0 based). 
+list keys file: each line of this file should be the location of a SIFT key file. The order should be consistent with image index (0 based). 
 
-<num images>: total number of images
+num images: total number of images
 
-<num points>: total number of points
+num points: total number of points
 
-<k cover>: K used in the probabilistic K-cover algorithm
+k cover: K used in the probabilistic K-cover algorithm
 
-<percentage>: The target percentage of coverage over all images
+percentage: The target percentage of coverage over all images
 
-<point idx file>: The output file of selected point indices
+point idx file: The output file of selected point indices
 
 [record dist]: Record distribution of each image being covered, for debugging purposes. Normally could be set to 0.
 
