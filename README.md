@@ -4,8 +4,8 @@ minimal_scene
 Code for the CVPR 2014 paper "Minimal Scene Descriptions from Structure from Motion Models"
 
 Platform tested: Ubuntu 12.04, Ubuntu 14.04
-Packages required: g++, libtbb-dev, zlib1g-dev
 
+Packages required: g++, libtbb-dev, zlib1g-dev
 
 Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points} {k cover} {percentage} {point idx file} [record dist] [use k-cover] [reduce memory] [ip weight] [min prob] [threshold as prob] [none 0; read mean 1; write mean 2] [mean file] [use binary] [load pt idx] [cdf file] [cdf as prob]
 
