@@ -9,7 +9,7 @@ int main(int argc, char **argv)
         printf("Usage: %s <img_pt_mat file> <list keys file> "
                "<num images> <num points> "
                "<k cover> <percentage> "
-               "<point idx file> [record dist] [use k-cover] "
+               "<point idx file> [record dist] "
                "[reduce memory] [ip weight] [min prob] [threshold as prob] "
                "[none 0; read mean 1; write mean 2] [mean file] [use binary] "
                "[load pt idx] [cdf file] [cdf as prob]\n", argv[0]);
@@ -33,30 +33,26 @@ int main(int argc, char **argv)
 
     bool use_approx = false;
     bool use_direct = false;
-    bool use_kc = false;
-    if (argc >= 10){
-        use_kc = (atoi(argv[9]) > 0);
-    }
 
     bool use_rd = false;
     bool use_rm = false;
-    if (argc >= 11){
-        use_rm = (atoi(argv[10]) > 0);
+    if (argc >= 10){
+        use_rm = (atoi(argv[9]) > 0);
     }
     
     float ip_weight = 1.0f;
     float min_prob = 0.99;
-    if (argc >= 12){
-        ip_weight = atof(argv[11]);
+    if (argc >= 11){
+        ip_weight = atof(argv[10]);
     }
-    if (argc >= 13){
-        min_prob = atof(argv[12]);
+    if (argc >= 12){
+        min_prob = atof(argv[11]);
     }
     bool use_pb = (ip_weight > 0.0) && (min_prob > 0.0);
 
     bool thresh_as_prob = false;
-    if (argc >= 14){
-        thresh_as_prob = (atoi(argv[13]) > 0);
+    if (argc >= 13){
+        thresh_as_prob = (atoi(argv[12]) > 0);
         if (thresh_as_prob)
             printf("use threshold discounted value as prob\n");
         else
@@ -64,8 +60,8 @@ int main(int argc, char **argv)
     }
     
     bool write_mean = false, read_mean = false;
-    if (argc >= 15){
-        int mean_mode = atoi(argv[14]);
+    if (argc >= 14){
+        int mean_mode = atoi(argv[13]);
         if (mean_mode == 1){
             read_mean = true;
             printf("read existing mean file ");
@@ -75,20 +71,20 @@ int main(int argc, char **argv)
         }
     }
     
-    if ((read_mean || write_mean) && argc < 16){
+    if ((read_mean || write_mean) && argc < 15){
         printf("mean file path required!\n");
         exit(1);
     }
 
     const char *mean_path = NULL;
-    if (argc >= 16) {
-        mean_path = argv[15];
+    if (argc >= 15) {
+        mean_path = argv[14];
         printf("%s\n", mean_path);
     }
 
     bool use_bin = false;
-    if (argc >= 17) {    
-        use_bin = (atoi(argv[16]) > 0);
+    if (argc >= 16) {    
+        use_bin = (atoi(argv[15]) > 0);
     }
 
     if (read_mean || write_mean){
@@ -99,20 +95,20 @@ int main(int argc, char **argv)
     }
 
     bool use_load = false;
-    if (argc >= 18){
-        use_load = (atoi(argv[17]) > 0);
+    if (argc >= 17){
+        use_load = (atoi(argv[16]) > 0);
     }
     
     const char *cdf_path = NULL;
     bool use_cdf = false;
-    if (argc >= 19){
+    if (argc >= 18){
         use_cdf = true;
-        cdf_path = argv[18];
+        cdf_path = argv[17];
     }
 
     bool cdf_as_prob = false;
-    if (argc >= 20){
-        cdf_as_prob = (atoi(argv[19]) > 0);
+    if (argc >= 19){
+        cdf_as_prob = (atoi(argv[18]) > 0);
     }
 
     FILE *f = NULL;
@@ -574,32 +570,10 @@ int main(int argc, char **argv)
             if (first_round) {
                 discount = 1.0f;
                 printf("First round, checking pt %d, skipping computing discount factor...\n", i);
-            } else if (use_kc) {
-                discount = 1.0f;
             } else if (use_direct) {
                 discount = 1 - points[i].get_pct_closer_to(points, selected_ids);
-                //printf("percentage closer to chosen points for point %d is %f\n", i, 1-discount);
-                //fflush(stdout);
             } else if (!use_approx) {
-                /*
-                float min_dist = INFINITY;
-                //#pragma omp parallel for
-                for (unsigned int j = 0; j < selected_ids.size(); j++){
-                    float new_dist = 0.0f;
-                    if (use_cdf)
-                        new_dist = points[selected_ids[j]].get_max_desc_dist(points[i]);
-                    else
-                        new_dist = points[selected_ids[j]].get_mean_dist(points[i]);
-                    //#pragma omp critical
-                    //{
-                        if (new_dist < min_dist)
-                            min_dist = new_dist;
-                        //}
-                }
-                */
                 clock_t start = clock();
-                //printf("Evaluating point %d, max_score: %f, max_gain: %f --- ", 
-                //       i, max_score, max_gains[i]);
                 float min_dist = points[i].get_min_dist_to_points(points, selected_ids);
                 clock_t end = clock();    
                 time_dist_round += (end - start) / ((double) CLOCKS_PER_SEC);
@@ -609,8 +583,6 @@ int main(int argc, char **argv)
                 } else {
                     discount = get_thresh_weight(min_dist_cur, min_dist);
                 }
-                //printf("point %d, min_dist %f,  min_id %d, discount %f\n", i, min_dist, points[i].min_dist_id, discount);
-                //printf("min_dist %f, min_id %d, discount %f, ", min_dist, points[i].min_dist_id, discount);
             } else {
                 float min_dist = INFINITY;
                 for (int j = 0; j < (int)unindexed_ids.size(); j++){
@@ -660,7 +632,6 @@ int main(int argc, char **argv)
             
             /* compute score for the current point */
             double score = new_cover * discount;
-            //printf("discount: %f, score: %f\n", discount, score);
             
             /* update max_gain for pruning */
             max_gains[i] = score;
@@ -816,26 +787,19 @@ int main(int argc, char **argv)
                                       0.0f, covered_mat, prob_mat, 
                                       false, true);
 
-            //double max_pb_val = 0.0;
             printf("Image %d surv %f distribution:", i, surv);
             
             for (SpRowMat::InnerIterator it (prob_mat, i); it; ++it){
                 printf(" %f", it.value());
-                //if (it.value() > max_pb_val)
-                //max_pb_val = it.value();
             }
             printf("\n");
-            //max_pb_vals.push_back(max_pb_val);
-            //printf("image %d has max_pb_val %f\n", i, max_pb_val);
 
             covered_prob[i] = surv;
             covered_imgs[i] = (surv >= min_prob);
 
             if (covered_imgs[i]){
                 num_img_covered++;
-            } //else {
-            //printf("Image %d not covered, covered times: %d, covered prob: %f\n", i, covered_times[i], surv);
-            //}
+            }
         
             if ((i+1) % 500 == 0){
                 printf("Evaluated survival functions of %d images (%f%%)...\n", 
@@ -851,18 +815,8 @@ int main(int argc, char **argv)
 
         /* use pb_gains to record utility value for each point */
         std::vector<double> pb_gains; pb_gains.reserve(num_pts);
-        //std::vector<bool> dirty_vec; dirty_vec.reserve(num_pts);
         for (int i = 0; i < num_pts; i++) {
             pb_gains.push_back(0.0);
-            /*
-            dirty_vec.push_back(true);
-            max_gains[i] = 0.0;
-            for (unsigned int j = 0; j < points[i].m_imgs.size(); j++) {
-                if (!covered_imgs[points[i].m_imgs[j]])
-                    max_gains[i] += points[i].m_probs[j];
-                    //max_gains[i] += points[i].m_probs[j] * max_pb_vals[points[i].m_imgs[j]];
-            }
-            */
         }
         
         printf("Finished resetting score array pb_gains...\n");
@@ -879,31 +833,18 @@ int main(int argc, char **argv)
             
 #pragma omp parallel for
             for (int i = 0; i < num_pts; i++){
-                //if (chosen_pts[i] || max_gains[i] <= max_score)
-                //if (chosen_pts[i] || !dirty_vec[i] || max_gains[i] <= 0)
                 if (chosen_pts[i])
                     continue;
 
-                //printf("Evaluating point %d, max_score: %.3f, max_gains: %.3f, ", 
-                //       i, max_score, max_gains[i]);
-                //printf("Evaluating point %d, previous pb_gain: %.3f, ", 
-                //       i, pb_gains[i]);
-
                 pb_gains[i] = 0.0;
-                //max_gains[i] = 0.0;
 
                 for (unsigned int j = 0; j < points[i].m_imgs.size(); j++) {
                     int loc_img_id = points[i].m_imgs[j];
 
                     if (!covered_imgs[loc_img_id]){
                         pb_gains[i] += prob_mat.coeffRef(loc_img_id, kc-1) * points[i].m_probs[j];
-                        //max_gains[i] += max_pb_vals[loc_img_id] * points[i].m_probs[j];
                     }
                 }
-                //printf("after pb_gain: %.3f\n", pb_gains[i]);
-                //dirty_vec[i] = false;
-                //printf("Skipping point %d, pb_gain: %.3f\n", 
-                //       i, pb_gains[i]);
             }
 
             for (int i = 0; i < num_pts; i++){
@@ -923,11 +864,7 @@ int main(int argc, char **argv)
                     }
                 }
 
-                // compute score for the current point
                 double score = pb_gains[i] * pt_prob;
-
-                //printf("max_gains after %.3f, score %.3f\n", 
-                //       max_score, max_gains[i]);
 
                 if (score > max_score){
                     max_score = score;

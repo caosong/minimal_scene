@@ -7,7 +7,7 @@ Platform tested: Ubuntu 12.04, Ubuntu 14.04
 
 Packages required: g++, libtbb-dev, zlib1g-dev
 
-Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points} {k cover} {percentage} {point idx file} [record dist] [use k-cover] [reduce memory] [ip weight] [min prob] [threshold as prob] [none 0; read mean 1; write mean 2] [mean file] [use binary] [load pt idx] [cdf file] [cdf as prob]
+Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points} {k cover} {percentage} {point idx file} [record dist] [reduce memory] [ip weight] [min prob] [threshold as prob] [none 0; read mean 1; write mean 2] [mean file] [use binary] [load pt idx] [cdf file] [cdf as prob]
 
 {} means required arguments and [] means optional arguments. Here is a subset of arguments explained:
 
@@ -31,8 +31,6 @@ Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points}
 
 [record dist]: Record distribution of each image being covered, for debugging purposes. Normally could be set to 0.
 
-[use k-cover]: 1 for running the baseline K-cover algorithm, otherwise 0. 
-
 [reduce memory]: whether try to reduce memory usage, 0 for not to, which is faster.
 
 [ip weight]: The 'p' in the paper used as the constant probability of an visibility event. (0.6 used in the paper)
@@ -42,4 +40,4 @@ Usage: point_reduce {img_pt_mat file} {list keys file} {num images} {num points}
 Optionally, to save time of reading all the SIFT key files and compute the mean descriptors of all the points, one can choose to run the program once and write the mean descriptors of each point as a file, and all subsequent running instances could choose to read the mean file. [use binary] dictates whether the binary format is used for these operations.
 
 Example command:
-point_reduce data/img_pt_pos_mat data/list.key.txt 6044 1886884 12 0.99 selected_idx 0 0 0 0.6 0.99 0 1 006/data/mean_desc.bin 1
+point_reduce data/img_pt_pos_mat data/list.key.txt 6044 1886884 12 0.99 selected_idx 0 0 0.6 0.99 0 1 006/data/mean_desc.bin 1
